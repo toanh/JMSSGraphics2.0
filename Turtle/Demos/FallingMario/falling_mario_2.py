@@ -10,13 +10,15 @@ game = Graphics(600, 400, "My Game!")
 x = 200
 y = 300
 
-while True:
-    y = y - 2
+label .again
 
-    game.clear()
-    game.drawImage("mario.gif", x, y)
+y = y - 2
 
-    game.reveal()
+game.clear()
+game.drawImage("mario.gif", x, y)
+
+if game.reveal():
+    goto .again
 
 
 

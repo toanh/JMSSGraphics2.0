@@ -25,7 +25,7 @@ player1_y = 150
 player2_x = 560
 player2_y = 150
 
-while True:
+while game.reveal():
 
     # drawing all the objects
     game.clear()
@@ -96,4 +96,4 @@ while True:
         ball_x = player2_x -16
         ball_vel_x = -ball_vel_x
 
-    game.reveal()
+
