@@ -32,8 +32,6 @@ while True:
     game.drawImage("ball.gif", ball_x, ball_y)
     game.drawImage("paddle_red.gif", player1_x, player1_y)
     game.drawImage("paddle_blue.gif", player2_x, player2_y)
-    game.drawImage("paddle_blue.gif", 200, 100)
-    game.drawImage("paddle_red.gif", 300, 200)
 
     # doing the input checking
     if game.isKeyPressed(KEY_W):

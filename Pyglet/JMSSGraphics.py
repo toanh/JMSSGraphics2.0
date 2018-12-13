@@ -275,6 +275,7 @@ class JMSSPygletApp(pyglet.window.Window):
     def reveal(self):
         if self.closed:
             return False
+
         pyglet.clock.tick()
 
         self.switch_to()
@@ -283,7 +284,7 @@ class JMSSPygletApp(pyglet.window.Window):
 
         if self.closed:
             return False
-        self.flip()
+
 
         glEnable(GL_BLEND)
 
@@ -292,9 +293,14 @@ class JMSSPygletApp(pyglet.window.Window):
         elif self.blend_type == BLEND_ADDITIVE:
             glBlendFunc(GL_ONE, GL_ONE)
 
+        for command in self.graphics.commands:
+            command[0](**command[1])
+
         self.graphics._renderPrimitives(self.renderType)
 
         glDisable(GL_BLEND)
+
+        self.flip()
 
         # prepare for next frame
         self.invalid = False
@@ -304,6 +310,7 @@ class JMSSPygletApp(pyglet.window.Window):
         self.vertex_array = []
 
         return True
+
     def mainloop(self, dt, *args, **kwargs):
         self.renderType = 0
 
@@ -403,6 +410,8 @@ class Graphics:
 
         self.app = JMSSPygletApp(fps, self)
 
+        self.commands = []
+
     def run(self):
         self.app.start()
         pyglet.app.run()
@@ -414,12 +423,21 @@ class Graphics:
         self.app.init_func = func
 
     def reveal(self):
-        self.app.reveal()
+        result = self.app.reveal()
+
+
+
+        self.commands = []
+        return result
 
     def mainloop(self, func):
         self.app.draw_func = func
 
     def clear(self, r = 0, g = 0, b = 0, a = 1):
+        kwargs = {"r":r, "g":g, "b":b, "a":a}
+        self.commands.append([self.__clear, kwargs])
+
+    def __clear(self, r=0, g=0, b=0, a=1):
         pyglet.gl.glClearColor(r, g, b, a)
         self.app.clear()
 
@@ -525,14 +543,20 @@ class Graphics:
         glDisable(GL_TEXTURE_2D)
 
     # drawText draws immediately without batching
-    def drawText(self, text, x, y, fontName = "Arial", fontSize = 10, color = (1, 1, 1, 1), anchorX = "left", anchorY ="bottom"):
+    def __drawText(self, text, x, y, fontName = "Arial", fontSize = 10, color = (1, 1, 1, 1), anchorX = "left", anchorY ="bottom"):
         self._renderPrimitives(self.app.renderType)
 
         label = pyglet.text.Label(text, color = self._convColor(color), font_name=fontName, font_size=fontSize, x = x, y = y, \
                                   anchor_x = anchorX, anchor_y = anchorY)
         label.draw()
 
+
     def drawImage(self, image, x, y, width = None, height = None, rotation=0, anchorX = None, anchorY = None, opacity=1.0, r = 1.0, g = 1.0, b = 1.0, rect=None):
+        kwargs = {"image":image, "x":x, "y":y, "width":width, "height":height, "rotation":rotation, "anchorX":anchorX,
+                  "anchorY":anchorY, "opacity":opacity, "r":r, "g":g, "b":b, "rect":rect}
+        self.commands.append([self.__drawImage, kwargs])
+
+    def __drawImage(self, image, x, y, width = None, height = None, rotation=0, anchorX = None, anchorY = None, opacity=1.0, r = 1.0, g = 1.0, b = 1.0, rect=None):
         if (isinstance(image, str)):
             image = self.loadImage(image)
         if self.app.texture != image or self.app.renderType != 1:
@@ -607,7 +631,7 @@ class Graphics:
             self.app.vertex_array += final_points[i*2:(i + 1) * 2] + [1]
 
     # width is not currently supported
-    def drawLine(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0, width = 1):
+    def __drawLine(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0, width = 1):
         if self.app.renderType != 3:
             self._renderPrimitives(self.app.renderType)
             self.app.renderType = 3
@@ -620,7 +644,7 @@ class Graphics:
         self.app.vertex_array += [0, 0, -1]
         self.app.vertex_array += [x2, y2, 1]
 
-    def drawRect(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
+    def __drawRect(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
         if self.app.renderType != 4:
             self._renderPrimitives(self.app.renderType)
             self.app.renderType = 4
@@ -637,7 +661,7 @@ class Graphics:
             self.app.vertex_array += [0, 0, -1]
             self.app.vertex_array += [verts[i * 2], verts[(i * 2) + 1], 1]
 
-    def drawCircle(self, x, y, radius, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
+    def __drawCircle(self, x, y, radius, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
         if self.app.renderType != 4:
             self._renderPrimitives(self.app.renderType)
             self.app.renderType = 4
@@ -674,7 +698,7 @@ class Graphics:
             self.app.vertex_array += [0, 0, -1]
             self.app.vertex_array += [verts[i * 6 + 4], verts[(i * 6) + 5], 1]
 
-    def drawPixel(self, x, y, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
+    def __drawPixel(self, x, y, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
         if self.app.renderType != 5:
             self._renderPrimitives(self.app.renderType)
             self.app.renderType = 5
@@ -684,7 +708,7 @@ class Graphics:
         self.app.vertex_array += [0, 0, -1]
         self.app.vertex_array += [x, y, 1]
 
-    def drawRawPixels(self, data, x, y, width, height):
+    def __drawRawPixels(self, data, x, y, width, height):
         if self.app.renderType != 5:
             self._renderPrimitives(self.app.renderType)
             self.app.renderType = 5
