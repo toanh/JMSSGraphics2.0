@@ -1,7 +1,5 @@
 <html>
 <head>
-<script src="brython.js"></script>
-<script src="brython_stdlib.js"></script>
 <style>
 #canvas {
     position: absolute;
@@ -12,12 +10,11 @@
     margin:auto;
 }
 </style>
+<script type="module">import * as JMSSGraphics from './__target__/JMSSGraphics.js'; window.JMSSGraphics = JMSSGraphics;</script>
+<script type="module">import * as Test01 from './__target__/Test01.js'; window.Test01 = Test01;</script>
 </head>
-<body onLoad="brython({debug:1})">
-<script type="text/python" src="Test01.py">
-<!--<script type="text/python" src="ParticleSystem_waterhose.py">-->
-<!--<script type="text/python" src="Digits.py">-->
-</script>
+<body>
+<canvas id="canvas" width="300" height="300"></canvas>
 </body>
 
 

@@ -1,12 +1,16 @@
+'''
+
 from browser import doc
 from browser import timer
 from browser import html
 
 from browser import window, load
+'''
 
-load("howler.js")
+#load("howler.js")
 import math
 
+__pragma__ ('kwargs')
 # Key symbol constants
 
 # ASCII commands
@@ -284,30 +288,42 @@ class Graphics:
         self.draw_func = None
         self.init_func = None
 
-        self.keys = dict([(a, False) for a in range(255)] +
-                         [(a, False) for a in range(0xff00, 0xffff)])
+        #self.keys = dict([(a, False) for a in range(255)] +
+        #                 [(a, False) for a in range(0xff00, 0xffff)])
+        self.keys = dict([(a, False) for a in range(255)])
 
         self.mouse_event = None
         self.mouse_pos = None
         self.mouse_buttons = 0
 
-        c = html.CANVAS(width=self.width, height=self.height, id="canvas")
+        #c = html.CANVAS(width=self.width, height=self.height, id="canvas")
 
-        doc <= c
 
-        self.canvas = doc["canvas"]
+        #doc <= c
+
+        #self.canvas = doc["canvas"]
+        #self.ctx = self.canvas.getContext('2d')
+
+        self.canvas = document.getElementById('canvas')
+        self.canvas.setAttribute("width", self.width)
+        self.canvas.setAttribute("height", self.width)
         self.ctx = self.canvas.getContext('2d')
 
-        doc <= html.TITLE(self.title)
 
-        doc.bind("keydown", self._keydown)
-        doc.bind("keyup", self._keyup)
-        doc.bind("mousemove", self._mousemove)
-        doc.bind("mousedown", self._mousedown)
-        doc.bind("mouseup", self._mouseup)
-        doc.bind("touchstart", self._touchstart)
-        doc.bind("touchmove", self._touchmove)
-        doc.bind("touchend", self._touchend)
+        #doc <= html.TITLE(self.title)
+
+        #document.onkeypress = self.keyHandler
+
+        self.canvas.onkeydown = self._keydown
+        '''
+        self.canvas.bind("keyup", self._keyup)
+        self.canvas.bind("mousemove", self._mousemove)
+        self.canvas.bind("mousedown", self._mousedown)
+        self.canvas.bind("mouseup", self._mouseup)
+        self.canvas.bind("touchstart", self._touchstart)
+        self.canvas.bind("touchmove", self._touchmove)
+        self.canvas.bind("touchend", self._touchend)
+        '''
 
         #doc.bind('load', self.pageshow)
 
@@ -318,8 +334,9 @@ class Graphics:
         self.commands = []
         self.prevTimeStamp = 0
 
-    def drawFrame(self, timestamp):
-        if (timestamp - self.prevTimeStamp) < 60:
+    def drawFrame(self):
+        if (timestamp - self.prevTimeStamp) < 16:
+            settimeout()
             return
 
         self.prevTimeStamp = timestamp
@@ -330,7 +347,11 @@ class Graphics:
         return True
 
     def reveal(self):
-        window.requestAnimationFrame(self.drawFrame)
+        current_time = performance.now()
+        if (current_time - self.prevTimeStamp) > 16:
+            self.prevTimeStamp = current_time
+            self.drawFrame()
+            #HELP!!!
         return
 
     def run(self):
