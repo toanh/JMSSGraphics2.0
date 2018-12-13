@@ -9,10 +9,10 @@ y = 300
 
 r = 0.0
 
-while True:
+while game.reveal():
     y = y - 2
     game.clear(r = r)
     r += 0.01
     if r > 1.0:
         r = 0.0
-    game.reveal()
+

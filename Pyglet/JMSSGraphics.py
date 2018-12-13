@@ -262,6 +262,8 @@ class JMSSPygletApp(pyglet.window.Window):
         self.blend_type = BLEND_ALPHA
         self.texture = None
 
+        self.closed = False
+
         #self.set_mouse_visible(False)
 
     def start(self):
@@ -271,11 +273,16 @@ class JMSSPygletApp(pyglet.window.Window):
         pyglet.clock.set_fps_limit(self.fps)
 
     def reveal(self):
+        if self.closed:
+            return False
         pyglet.clock.tick()
 
         self.switch_to()
         self.dispatch_events()
         #self.dispatch_event('on_draw')
+
+        if self.closed:
+            return False
         self.flip()
 
         glEnable(GL_BLEND)
@@ -296,7 +303,7 @@ class JMSSPygletApp(pyglet.window.Window):
         self.texture = None
         self.vertex_array = []
 
-
+        return True
     def mainloop(self, dt, *args, **kwargs):
         self.renderType = 0
 
@@ -322,6 +329,10 @@ class JMSSPygletApp(pyglet.window.Window):
         glDisable(GL_BLEND)
 
         self.invalid = False
+
+    def on_close(self):
+        self.closed = True
+        self.close()
 
     def on_key_press(self, symbol, modifiers):
         self.keys[symbol] = True
