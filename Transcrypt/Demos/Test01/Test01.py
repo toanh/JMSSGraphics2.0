@@ -17,7 +17,6 @@ def doFrame():
 
     game.drawText("Hello, world!", 100, 100)
 
-    game.drawImage("ball.png", 0, 0)
     r += 0.01
     if r > 1.0:
         r = 0.0
