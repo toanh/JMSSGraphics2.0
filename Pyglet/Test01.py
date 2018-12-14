@@ -9,6 +9,7 @@ y = 300
 
 r = 0.0
 
+
 while game.reveal():
     y = y - 2
     game.clear(r = r)

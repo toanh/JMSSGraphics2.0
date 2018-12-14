@@ -9,10 +9,14 @@ y = 300
 
 r = 1.0
 
-while True:
+def frame():
+    global y
     y = y - 2
     game.clear(r = r, b = 1.0)
     r += 0.01
     if r > 1.0:
         r = 0.0
-    game.reveal()
+
+game.mainloop(main)
+
+game.run()

@@ -309,7 +309,6 @@ class Graphics:
         self.canvas.setAttribute("height", self.width)
         self.ctx = self.canvas.getContext('2d')
 
-
         #doc <= html.TITLE(self.title)
 
         #document.onkeypress = self.keyHandler
@@ -369,13 +368,7 @@ class Graphics:
     def mainloop(self, func):
         self.draw_func = func
 
-
     def clear(self, r = 0, g = 0, b = 0, a = 1):
-        kwargs = {"r":r, "g":g, "b":b, "a":a}
-        self.commands.append([self._clear, kwargs])
-
-
-    def _clear(self, r = 0, g = 0, b = 0, a = 1):
         self.ctx.fillStyle= "rgba(" + str(int(r * 255.0)) + "," + str(int(g * 255.0)) + "," + str(int(b * 255.0)) + "," + str(int(a * 255.0))+ ")"
         self.ctx.fillRect(0, 0, self.width, self.height)
 
