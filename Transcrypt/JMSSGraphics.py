@@ -229,10 +229,11 @@ MOUSE_BUTTON_RIGHT  = 2
 MOUSE_BUTTON_MIDDLE = 3
 
 class JMSSImage():
-    def __init__(self, image):
+    def __init__(self, image, name = None):
         self.img = image
         self.height = image.naturalHeight
         self.width = image.naturalWidth
+        self.name = name
 
 class Graphics:
     def _keydown(self, ev):
@@ -309,11 +310,13 @@ class Graphics:
         self.canvas.setAttribute("height", self.width)
         self.ctx = self.canvas.getContext('2d')
 
+
         #doc <= html.TITLE(self.title)
 
-        #document.onkeypress = self.keyHandler
+        document.onkeydown = self._keydown
+        document.onkeyup = self._keyup
 
-        self.canvas.onkeydown = self._keydown
+
         '''
         self.canvas.bind("keyup", self._keyup)
         self.canvas.bind("mousemove", self._mousemove)
@@ -324,40 +327,24 @@ class Graphics:
         self.canvas.bind("touchend", self._touchend)
         '''
 
-        #doc.bind('load', self.pageshow)
 
         self.soundPlayers = {}
 
         self.loadingResources = 0
 
+        self.resources = {}
+
         self.commands = []
         self.prevTimeStamp = 0
 
-    def drawFrame(self):
-        if (timestamp - self.prevTimeStamp) < 16:
-            settimeout()
-            return
-
-        self.prevTimeStamp = timestamp
-
-        for command in self.commands:
-            command[0](**command[1])
-        self.commands = []
-        return True
-
     def reveal(self):
-        current_time = performance.now()
-        if (current_time - self.prevTimeStamp) > 16:
-            self.prevTimeStamp = current_time
-            self.drawFrame()
-            #HELP!!!
         return
 
     def run(self):
-        timer.set_interval(self.draw_func, 1000 * 1.0 / 60.0)
+        window.setInterval(self.draw_func, 17.0)
 
     def exit(self):
-        pyglet.app.exit()
+        return
 
     def pageshow(self, ev):
         self.init_func()
@@ -381,14 +368,20 @@ class Graphics:
         e.target.jmssImg.width = e.target.naturalWidth
 
     def loadImage(self, file):
+        if file in self.resources:
+            return self.resources[file]
         self.loadingResources += 1
-        img = html.IMG(src = file)
-        img.bind('load', self.resourceLoaded)
+        img = document.createElement("img")
+        img.addEventListener('load', self.resourceLoaded, False)
+        img.setAttribute("src", file)
+
         jmssImg = JMSSImage(img)
         img.jmssImg = jmssImg
+        self.resources[file] = jmssImg
+
         return jmssImg
 
-    def isKeyDown(self, key):
+    def isKeyPressed(self, key):
         return self.keys[key]
 
     def isMousePressed(self, button):
@@ -406,12 +399,9 @@ class Graphics:
     def _convColor(self, c):
         return (int(c[0] * 255.0), int(c[1] * 255.0), int(c[2] * 255.0), int(c[3] * 255.0))
 
-    def createLabel(self, text, fontName, fontSize, x, y, anchorX, anchorY):
-        return pyglet.text.Label(text, font_name=fontName, font_size=fontSize, x = x, y = y, anchor_x = anchorX, anchor_y = anchorY)
-
     def loadSound(self, filename, streaming = False):
         howl = window.Howl
-        return howl.new({"src": [filename]})
+        return __new__(howl({"src": [filename]}))
 
     def playSound(self, sound, loop = False):
         sound.loop = loop
@@ -444,10 +434,10 @@ class Graphics:
             self.ctx.drawImage(image.img, x, self._convY(y + image.height))
 
     def drawCircle(self, color, pos, radius, width = 0):
-        pygame.draw.circle(self.screen, color, self._conv(pos), radius, width)
+        pass
 
     def drawPixel(self, pos, color):
-        self.screen.set_at(self._conv(pos), color)
+        pass
 
     def drawLine(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0, width = 1):
         self.ctx.beginPath()
