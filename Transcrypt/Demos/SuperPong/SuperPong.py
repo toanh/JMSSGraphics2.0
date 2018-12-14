@@ -2,7 +2,7 @@ from JMSSGraphics import *
 
 from random import *
 import math
-import colorsys
+#import colorsys
 
 class Entity:
     def __init__(self, filename):
@@ -50,15 +50,15 @@ class Paddle(Entity):
         if self.timer < 0:
             self.timer = 0
         self.ydir *= 0.9
-        if jmss.isKeyDown(self.up):
+        if jmss.isKeyPressed(self.up):
             self.ydir += 0.5
             if self.ydir >= 3:
                 self.ydir = 3
-        if jmss.isKeyDown(self.down):
+        if jmss.isKeyPressed(self.down):
             self.ydir -= 0.5
             if self.ydir <= -3:
                 self.ydir = -3
-        if jmss.isKeyDown(self.fire) and self.timer == 0:
+        if jmss.isKeyPressed(self.fire) and self.timer == 0:
             self.timer = self.coolDown
             if (self.fireDir > 0):
                 game.SpawnBullet(self.x + self.gun.width / 2, self.y + self.height / 2, self.fireDir * 10, self)
@@ -117,7 +117,7 @@ class Game:
 
 
     def drawTriangleList(self, triList):
-        colour = colorsys.hsv_to_rgb(self.angle/2, 0.6, 0.6)
+        colour = [1,1,1]
         # turtle.pencolor(colour)
         for i in range(0, len(triList), 3):
             jmss.drawLine(triList[i][0], triList[i][1], triList[i + 1][0], triList[i + 1][1], r = colour[0], g = colour[1], b = colour[2])
@@ -254,7 +254,7 @@ class Game:
         jmss.drawImage(self.title_image, 0, 0)
 
     def UpdateTitle(self):
-        if jmss.isKeyDown(KEY_SPACE):
+        if jmss.isKeyPressed(KEY_SPACE):
             self.gameState = 1
 
     def DrawWin(self):
@@ -266,7 +266,7 @@ class Game:
         jmss.drawText("Player " + str(winner) + " wins!!", 170, 200, fontSize = 30)
 
     def UpdateWin(self):
-        if jmss.isKeyDown(KEY_SPACE):
+        if jmss.isKeyPressed(KEY_SPACE):
             self.gameState = 1
             self.ResetGame()
 
