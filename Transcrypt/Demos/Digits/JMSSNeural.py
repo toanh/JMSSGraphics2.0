@@ -17,19 +17,24 @@ def neuron_output(weights, inputs):
 def feed_forward(neural_network, inputs):
     outputs = []
 
+    temp_inputs = inputs
+
     for layer in neural_network:
         # add a bias input with weight 1.0
-        input_with_bias = inputs + [1]
+        __pragma__('opov')
+        input_with_bias = temp_inputs + [1]
+        __pragma__('noopov')
 
         output = [neuron_output(neuron, input_with_bias)
                   for neuron in layer]
+        temp_inputs = output
         outputs.append(output)
 
         #print (input_with_bias)
 
         #print(output)
 
-        inputs = output
+
     return outputs
 
 def backpropagate(network, inputs, targets, learning_rate = 1.0):
@@ -39,16 +44,20 @@ def backpropagate(network, inputs, targets, learning_rate = 1.0):
                      for output, target in zip(outputs, targets)]
 
     for i, output_neuron in enumerate(network[-1]):
+        __pragma__('opov')
         for j, hidden_output in enumerate(hidden_outputs + [1]):
             output_neuron[j] -= learning_rate * output_deltas[i] * hidden_output
+        __pragma__('noopov')
 
     hidden_deltas = [hidden_output * (1 - hidden_output) *
                      dot(output_deltas, [n[i] for n in network[-1]])
                      for i, hidden_output in enumerate(hidden_outputs)]
 
     for i, hidden_neuron in enumerate(network[0]):
+        __pragma__('opov')
         for j, in_put in enumerate(inputs + [1]):
             hidden_neuron[j] -= learning_rate * hidden_deltas[i] * in_put
+        __pragma__('noopov')
 
 def nn_predict(network, input):
     return feed_forward(network, input)[-1]
