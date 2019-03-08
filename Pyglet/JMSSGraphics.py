@@ -1,4 +1,4 @@
-# Version 1.2.4
+# Version 2.0.0
 
 import pyglet
 import math
@@ -285,7 +285,6 @@ class JMSSPygletApp(pyglet.window.Window):
         if self.closed:
             return False
 
-
         glEnable(GL_BLEND)
 
         if self.blend_type == BLEND_ALPHA:
@@ -331,9 +330,14 @@ class JMSSPygletApp(pyglet.window.Window):
             else:
                 self.draw_func()
 
+        for command in self.graphics.commands:
+            command[0](**command[1])
+
         self.graphics._renderPrimitives(self.renderType)
 
         glDisable(GL_BLEND)
+
+        self.graphics.commands = []
 
         self.invalid = False
 
@@ -425,8 +429,6 @@ class Graphics:
     def reveal(self):
         result = self.app.reveal()
 
-
-
         self.commands = []
         return result
 
@@ -445,10 +447,13 @@ class Graphics:
         self.fps = fps
 
     def loadImage(self, file):
-        return pyglet.resource.image(file)
+        return pyglet.image.load(file)
 
     def isKeyPressed(self, key):
         return self.app.keys[key]
+
+    def isKeyDown(self, key):
+        return self.isKeyPressed(key)
 
     def isMousePressed(self, key):
         return self.app.mouse_button_pressed == key
@@ -542,6 +547,11 @@ class Graphics:
         glBindTexture(GL_TEXTURE_2D, 0)
         glDisable(GL_TEXTURE_2D)
 
+    def drawText(self, text, x, y, fontName = "Arial", fontSize = 10, color = (1, 1, 1, 1), anchorX = "left", anchorY ="bottom"):
+        kwargs = {"text":text, "x":x, "y":y, "fontName":fontName, "fontSize":fontSize, "color":color, "anchorX":anchorX,
+                  "anchorY":anchorY}
+        self.commands.append([self.__drawText, kwargs])
+
     # drawText draws immediately without batching
     def __drawText(self, text, x, y, fontName = "Arial", fontSize = 10, color = (1, 1, 1, 1), anchorX = "left", anchorY ="bottom"):
         self._renderPrimitives(self.app.renderType)
@@ -629,6 +639,11 @@ class Graphics:
             self.app.vertex_array += colors[i*4:(i + 1) * 4]
             self.app.vertex_array += [0, 0, -1]
             self.app.vertex_array += final_points[i*2:(i + 1) * 2] + [1]
+
+    def drawLine(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0, width = 1):
+        kwargs = {"x1":x1, "y1":y1, "x2":x2, "y2":y2, "r":r, "g":g, "b":b,
+                  "a":a, "width":width}
+        self.commands.append([self.__drawLine, kwargs])
 
     # width is not currently supported
     def __drawLine(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0, width = 1):

@@ -29,6 +29,8 @@ while game.reveal():
 
     # drawing all the objects
     game.clear()
+    game.drawText("Hello", 0, 0)
+    game.drawLine(0, 0, 100, 100, 1, 0, 0, 1, 10)
     game.drawImage("ball.gif", ball_x, ball_y)
     game.drawImage("paddle_red.gif", player1_x, player1_y)
     game.drawImage("paddle_blue.gif", player2_x, player2_y)

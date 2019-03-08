@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-12-16 20:18:34
+// Transcrypt'ed from Python, 2018-12-16 21:32:07
 var math = {};
 var random = {};
 var time = {};
@@ -20,9 +20,9 @@ export var rain_img = jmss.loadImage ('rain.png');
 export var forest = jmss.loadImage ('forest.jpeg');
 export var torch_img = jmss.loadImage ('torch.png');
 export var rain_sound = jmss.loadSound ('rain.wav');
-jmss.playSound (rain_sound);
+jmss.playSound (rain_sound, __kwargtrans__ ({streaming: true}));
 export var fire_sound = jmss.loadSound ('crackling-fireplace.wav');
-jmss.playSound (fire_sound);
+jmss.playSound (fire_sound, __kwargtrans__ ({streaming: true}));
 export var fire_list = list ([]);
 export var fire_img_list = list ([fire_img, fire2_img]);
 export var rain_list = list ([]);
@@ -51,7 +51,7 @@ export var Fire1 = function () {
 		fire.x = random.randint (fire1_pos_x, fire1_pos_x + 13);
 		fire.y = 25;
 		fire.vel_x = random.randint (-(1), 1) / 2;
-		fire.vel_y = random.randint (1, 4);
+		fire.vel_y = random.random () * 2 + 1;
 		fire.size = random.randint (1, 30);
 		fire.opacity = 0.5;
 		fire_list.append (fire);
@@ -62,6 +62,12 @@ export var Fire1 = function () {
 		fire.x += fire.vel_x;
 		fire.size -= 0.2;
 		fire.opacity -= 0.01;
+		if (fire.opacity < 0.0) {
+			fire.opacity = 0.0;
+		}
+		else if (fire.opacity > 1.0) {
+			fire.opacity = 1.0;
+		}
 		jmss.drawImage (fire_img_list [fire.img_number], __kwargtrans__ ({x: fire.x, y: fire.y, width: fire.size, height: fire.size, opacity: fire.opacity}));
 		if (fire.y > max_fire_y) {
 			fire_list.remove (fire);
@@ -76,7 +82,7 @@ export var Fire2 = function () {
 		fire.x = random.randint (fire2_pos_x, fire2_pos_x + 13);
 		fire.y = 25;
 		fire.vel_x = random.randint (-(1), 1) / 2;
-		fire.vel_y = random.randint (1, 4);
+		fire.vel_y = random.random () * 2 + 1;
 		fire.size = random.randint (1, 30);
 		fire.opacity = 0.5;
 		fire_list.append (fire);
@@ -90,6 +96,9 @@ export var Fire2 = function () {
 		jmss.drawImage (fire_img_list [fire.img_number], __kwargtrans__ ({x: fire.x, y: fire.y, width: fire.size, height: fire.size, opacity: fire.opacity}));
 		if (fire.y > max_fire_y) {
 			fire_list.remove (fire);
+		}
+		if (fire.opacity <= 0) {
+			fire.opacity = 0;
 		}
 	}
 };
@@ -101,7 +110,7 @@ export var Fire3 = function () {
 		fire.x = random.randint (fire3_pos_x, fire3_pos_x + 13);
 		fire.y = 25;
 		fire.vel_x = random.randint (-(1), 1) / 2;
-		fire.vel_y = random.randint (1, 4);
+		fire.vel_y = random.random () * 2 + 1;
 		fire.size = random.randint (1, 30);
 		fire.opacity = 0.5;
 		fire_list.append (fire);
@@ -116,6 +125,9 @@ export var Fire3 = function () {
 		if (fire.y > max_fire_y) {
 			fire_list.remove (fire);
 		}
+		if (fire.opacity <= 0) {
+			fire.opacity = 0;
+		}
 	}
 };
 export var Rain = function () {
@@ -125,7 +137,7 @@ export var Rain = function () {
 		rain.img = rain_img;
 		rain.x = random.randint (0, 800);
 		rain.y = 600;
-		rain.vel_y = random.randint (-(15), -(10));
+		rain.vel_y = random.randint (-(15), -(5));
 		rain.size = 30;
 		rain.opacity = 1;
 		rain_list.append (rain);
@@ -134,6 +146,8 @@ export var Rain = function () {
 	for (var rain of rain_list) {
 		rain.y += rain.vel_y;
 		jmss.drawImage (rain.img, __kwargtrans__ ({x: rain.x, y: rain.y, width: rain.size, height: rain.size, opacity: rain.opacity}));
+	}
+	for (var rain of rain_list) {
 		if (rain.y < 0) {
 			rain_list.remove (rain);
 		}
@@ -141,7 +155,7 @@ export var Rain = function () {
 };
 export var Torch = function () {
 	torch_x = jmss.getMousePos () [0];
-	torch_y = jmss.getMousePos () [1];
+	torch_y = 600 - jmss.getMousePos () [1];
 	jmss.drawImage (torch_img, __kwargtrans__ ({x: torch_x, y: torch_y, width: 60, height: 60}));
 	if (torch_y < max_fire_y && torch_y > 25 && (torch_x < fire1_pos_x + 13 && torch_x > fire1_pos_x || torch_x < fire2_pos_x + 13 && torch_x > fire2_pos_x || torch_x < fire3_pos_x + 13 && torch_x > fire3_pos_x)) {
 		isTorchFire = true;
@@ -156,7 +170,7 @@ export var Torch = function () {
 			fire.vel_x = random.randint (-(1), 1) / 4;
 			fire.vel_y = random.randint (1, 4);
 			fire.size = random.randint (1, 20);
-			fire.opacity = 0.5;
+			fire.opacity = 0.3;
 			torch_fire_list.append (fire);
 			p++;
 		}
@@ -169,6 +183,9 @@ export var Torch = function () {
 			var max_torchfire_y = torch_y + 140;
 			if (t.y > max_torchfire_y) {
 				torch_fire_list.remove (t);
+			}
+			if (t.opacity <= 0) {
+				t.opacity = 0;
 			}
 		}
 	}

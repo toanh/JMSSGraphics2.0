@@ -440,15 +440,15 @@ class Graphics:
         if height is None:
             height = image.height
 
-
         if opacity is not None:
+            if opacity > 1.0:
+                opacity = 1.0
+            elif opacity < 0.0:
+                opacity = 0.0
             self.ctx.globalAlpha = opacity
-            self.ctx.drawImage(image.img, x, self._convY(y + image.height), width, height)
-
+            self.ctx.drawImage(image.img, x, self._convY(y + height), width, height)
         else:
-            self.ctx.drawImage(image.img, x, self._convY(y + image.height), width, height)
-
-
+            self.ctx.drawImage(image.img, x, self._convY(y + height), width, height)
         self.ctx.restore()
 
     def drawCircle(self, color, pos, radius, width = 0):
