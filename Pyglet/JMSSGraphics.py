@@ -1,4 +1,7 @@
 # Version 2.0.2
+# Latest updates:
+# Added drawRect(), drawCircle()
+# and close() <- by Peter Toronyi
 
 import pyglet
 import math
