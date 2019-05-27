@@ -420,6 +420,9 @@ class Graphics:
         self.app.start()
         pyglet.app.run()
 
+    def close(self):
+        self.app.close()
+
     def exit(self):
         pyglet.app.exit()
 
@@ -659,6 +662,11 @@ class Graphics:
         self.app.vertex_array += [0, 0, -1]
         self.app.vertex_array += [x2, y2, 1]
 
+    def drawRect(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
+        kwargs = {"x1":x1, "y1":y1, "x2":x2, "y2":y2, "r":r, "g":g, "b":b,
+                  "a":a}
+        self.commands.append([self.__drawRect, kwargs])
+
     def __drawRect(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
         if self.app.renderType != 4:
             self._renderPrimitives(self.app.renderType)
@@ -675,6 +683,11 @@ class Graphics:
             self.app.vertex_array += [r, g, b, a]
             self.app.vertex_array += [0, 0, -1]
             self.app.vertex_array += [verts[i * 2], verts[(i * 2) + 1], 1]
+
+    def drawCircle(self, x, y, radius, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
+        kwargs = {"x":x, "y":y, "radius":radius, "r":r, "g":g, "b":b,
+                  "a":a}
+        self.commands.append([self.__drawCircle, kwargs])
 
     def __drawCircle(self, x, y, radius, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
         if self.app.renderType != 4:
