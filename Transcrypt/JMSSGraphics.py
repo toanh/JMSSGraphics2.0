@@ -331,6 +331,8 @@ class Graphics:
         self.canvas.bind("touchmove", self._touchmove)
         self.canvas.bind("touchend", self._touchend)
         '''
+        self.pixel_id = self.ctx.createImageData(1, 1)
+        self.pixel_color = self.pixel_id.data
 
 
         self.soundPlayers = {}
@@ -347,6 +349,9 @@ class Graphics:
 
     def run(self):
         window.setInterval(self.draw_func, 17.0)
+
+    def close(self):
+        return
 
     def exit(self):
         return
@@ -451,11 +456,13 @@ class Graphics:
             self.ctx.drawImage(image.img, x, self._convY(y + height), width, height)
         self.ctx.restore()
 
-    def drawCircle(self, color, pos, radius, width = 0):
-        pass
+    def drawPixel(self, x, y, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
+        self.pixel_color[0] = int(r * 255.0)
+        self.pixel_color[1] = int(g * 255.0)
+        self.pixel_color[2] = int(b * 255.0)
+        self.pixel_color[3] = int(a * 255.0)
+        self.ctx.putImageData(self.pixel_id, x, self._convY(y))
 
-    def drawPixel(self, pos, color):
-        pass
 
     def drawLine(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0, width = 1):
         self.ctx.beginPath()
@@ -465,13 +472,25 @@ class Graphics:
         self.ctx.lineTo(x2, self._convY(y2))
         self.ctx.stroke()
 
-    def drawRect(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0):       
+    def drawCircle(self, x, y, radius, r=1.0, g=1.0, b=1.0, a=1.0):
+        self.ctx.fillStyle = "rgba(" + str(int(r * 255.0)) + "," + str(int(g * 255.0)) + "," + str(int(b * 255.0)) + "," + str(int(a * 255.0)) + ")"
+        self.ctx.beginPath();
+        self.ctx.strokeStyle = "rgba(" + str(int(r * 255.0)) + "," + str(int(g * 255.0)) + "," + str(
+            int(b * 255.0)) + "," + str(int(a * 255.0)) + ")"
+
+        self.ctx.arc(x, self._convY(y), radius, 0, 2 * Math.PI, True);
+
+        self.ctx.fill();
+
+        self.ctx.stroke()
+
+    def drawRect(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
         ctx = self.ctx
         ctx.fillStyle = "rgba(" + str(int(r * 255.0)) + "," + str(int(g * 255.0)) + "," + str(int(b * 255.0)) + "," + str(int(a * 255.0)) + ")"        
         ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y1);
-        ctx.lineTo(x2, y2);
-        ctx.lineTo(x1, y2);
+        ctx.moveTo(x1, self._convY(y1));
+        ctx.lineTo(x2, self._convY(y1));
+        ctx.lineTo(x2, self._convY(y2));
+        ctx.lineTo(x1, self._convY(y2));
         ctx.closePath();
         ctx.fill();            
