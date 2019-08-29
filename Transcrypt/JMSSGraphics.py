@@ -348,7 +348,8 @@ class Graphics:
         return
 
     def run(self):
-        window.setInterval(self.draw_func, 17.0)
+        #window.setInterval(self.draw_func, 17.0)
+        window.setInterval(self.draw_func, 1/self.fps * 1000)
 
     def close(self):
         return

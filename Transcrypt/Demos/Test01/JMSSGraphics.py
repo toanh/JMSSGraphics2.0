@@ -315,7 +315,12 @@ class Graphics:
 
         document.onkeydown = self._keydown
         document.onkeyup = self._keyup
-
+        document.onmousemove = self._mousemove
+        document.onmousedown = self._mousedown
+        document.onmouseup = self._mouseup
+        document.ontouchstart = self._touchstart
+        document.ontouchmove = self._touchmove
+        document.ontouchend = self._touchend
 
         '''
         self.canvas.bind("keyup", self._keyup)
@@ -383,6 +388,8 @@ class Graphics:
 
     def isKeyPressed(self, key):
         return self.keys[key]
+    def isKeyDown(self, key):
+        return self.isKeyPressed(key)
 
     def isMousePressed(self, button):
         return self.mouse_buttons == button
@@ -426,12 +433,23 @@ class Graphics:
         if self.loadingResources > 0:
             return
         self.ctx.save()
+
+        if width is None:
+            width = image.width
+
+        if height is None:
+            height = image.height
+
         if opacity is not None:
+            if opacity > 1.0:
+                opacity = 1.0
+            elif opacity < 0.0:
+                opacity = 0.0
             self.ctx.globalAlpha = opacity
-            self.ctx.drawImage(image.img, x, self._convY(y + image.height) )
-            self.ctx.restore()
+            self.ctx.drawImage(image.img, x, self._convY(y + height), width, height)
         else:
-            self.ctx.drawImage(image.img, x, self._convY(y + image.height))
+            self.ctx.drawImage(image.img, x, self._convY(y + height), width, height)
+        self.ctx.restore()
 
     def drawCircle(self, color, pos, radius, width = 0):
         pass

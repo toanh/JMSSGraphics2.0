@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-12-16 21:32:07
+// Transcrypt'ed from Python, 2019-08-28 21:27:52
 var math = {};
 var random = {};
 var time = {};
@@ -23,10 +23,10 @@ export var rain_sound = jmss.loadSound ('rain.wav');
 jmss.playSound (rain_sound, __kwargtrans__ ({streaming: true}));
 export var fire_sound = jmss.loadSound ('crackling-fireplace.wav');
 jmss.playSound (fire_sound, __kwargtrans__ ({streaming: true}));
-export var fire_list = list ([]);
-export var fire_img_list = list ([fire_img, fire2_img]);
-export var rain_list = list ([]);
-export var torch_fire_list = list ([]);
+export var fire_list = [];
+export var fire_img_list = [fire_img, fire2_img];
+export var rain_list = [];
+export var torch_fire_list = [];
 export var wood_x = 368;
 export var fire1_pos_x = 395;
 export var fire2_pos_x = 595;
@@ -197,6 +197,9 @@ export var Game = jmss.mainloop (function () {
 	Fire3 ();
 	Torch ();
 	Rain ();
+	jmss.drawCircle (50, 50, 50, 1, 0, 0);
+	jmss.drawRect (0, 0, 20, 20, 0, 0, 1);
+	jmss.drawPixel (50, 50, 1, 1, 1);
 });
 jmss.py_clear ();
 jmss.run ();

@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-12-16 21:32:08
+// Transcrypt'ed from Python, 2019-08-28 21:27:52
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
 var __name__ = 'time';
 try {
@@ -15,8 +15,8 @@ export var __adapt__ = function (request) {
 };
 export var __date = new Date (0);
 export var __now = new Date ();
-export var __weekdays = list ([]);
-export var __weekdays_long = list ([]);
+export var __weekdays = [];
+export var __weekdays_long = [];
 export var __d = new Date (1467662339080);
 for (var i = 0; i < 7; i++) {
 	for (var [l, s] of tuple ([tuple ([__weekdays, 'short']), tuple ([__weekdays_long, 'long'])])) {
@@ -24,8 +24,8 @@ for (var i = 0; i < 7; i++) {
 	}
 	__d.setDate (__d.getDate () + 1);
 }
-export var __months = list ([]);
-export var __months_long = list ([]);
+export var __months = [];
+export var __months_long = [];
 var __d = new Date (946681200000.0);
 for (var i = 0; i < 12; i++) {
 	for (var [l, s] of tuple ([tuple ([__months, 'short']), tuple ([__months_long, 'long'])])) {
@@ -36,7 +36,7 @@ for (var i = 0; i < 12; i++) {
 export var __lu = dict ({'Y': 0, 'm': 1, 'd': 2, 'H': 3, 'M': 4, 'S': 5});
 export var _lsplit = function (s, sep, maxsplit) {
 	if (maxsplit == 0) {
-		return list ([s]);
+		return [s];
 	}
 	var py_split = s.py_split (sep);
 	if (!(maxsplit)) {
@@ -90,7 +90,7 @@ export var _is_leap = function (year) {
 export var __jan_jun_tz = function (t, func) {
 	var was = t.getTime ();
 	t.setDate (1);
-	var res = list ([]);
+	var res = [];
 	for (var m of tuple ([0, 6])) {
 		t.setMonth (m);
 		if (!(func)) {
@@ -131,7 +131,7 @@ export var __tzn = function (t) {
 };
 export var _tzname = function (t) {
 	var cn = __tzn (t);
-	var ret = list ([cn, cn]);
+	var ret = [cn, cn];
 	var jj = __jan_jun_tz (t, __tzn);
 	var ind = 0;
 	if (!(_daylight_in_effect (t))) {
@@ -198,7 +198,7 @@ export var strptime = function (string, format) {
 	var fmt = __left0__ [1];
 	var get_next = function (fmt) {
 		var get_sep = function (fmt) {
-			var res = list ([]);
+			var res = [];
 			if (!(fmt)) {
 				return tuple (['', '']);
 			}
@@ -256,11 +256,11 @@ export var strptime = function (string, format) {
 					var l = 2;
 				}
 				if (l > -(1)) {
-					var lv = list ([ts.__getslice__ (0, l, 1), ts.__getslice__ (l, null, 1)]);
+					var lv = [ts.__getslice__ (0, l, 1), ts.__getslice__ (l, null, 1)];
 				}
 			}
 			if (!(lv)) {
-				var lv = list ([ts, '']);
+				var lv = [ts, ''];
 			}
 		}
 		else {
@@ -277,8 +277,8 @@ export var strptime = function (string, format) {
 			break;
 		}
 	}
-	var t = list ([1900, 1, 1, 0, 0, 0, 0, 1, -(1)]);
-	var ignore_keys = list ([]);
+	var t = [1900, 1, 1, 0, 0, 0, 0, 1, -(1)];
+	var ignore_keys = [];
 	var have_weekday = false;
 	for (var [d, v] of dir_val.py_items ()) {
 		if (__in__ (d, ignore_keys)) {
@@ -353,7 +353,7 @@ export var strptime = function (string, format) {
 			t [0] = 2000 + int (v);
 		}
 		else if (d == 'Z') {
-			if (__in__ (v.lower (), list (['gmt', 'utc']))) {
+			if (__in__ (v.lower (), ['gmt', 'utc'])) {
 				t [-(1)] = 0;
 			}
 		}

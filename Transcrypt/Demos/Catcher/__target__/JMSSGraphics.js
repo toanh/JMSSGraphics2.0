@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-12-17 22:43:42
+// Transcrypt'ed from Python, 2019-08-15 08:27:53
 var math = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
 import * as __module_math__ from './math.js';
@@ -412,7 +412,7 @@ export var Graphics =  __class__ ('Graphics', [object], {
 		self.title = title;
 		self.done = false;
 		self.fps = fps;
-		self.listeners = list ([]);
+		self.listeners = [];
 		self.draw_func = null;
 		self.init_func = null;
 		self.py_keys = dict ((function () {
@@ -440,7 +440,7 @@ export var Graphics =  __class__ ('Graphics', [object], {
 		self.soundPlayers = dict ({});
 		self.loadingResources = 0;
 		self.resources = dict ({});
-		self.commands = list ([]);
+		self.commands = [];
 		self.prevTimeStamp = 0;
 	});},
 	get reveal () {return __get__ (this, function (self) {
@@ -764,7 +764,7 @@ export var Graphics =  __class__ ('Graphics', [object], {
 		else {
 		}
 		var howl = window.Howl;
-		return new howl (dict ({'src': list ([filename])}));
+		return new howl (dict ({'src': [filename]}));
 	});},
 	get playSound () {return __get__ (this, function (self, sound, loop) {
 		if (typeof loop == 'undefined' || (loop != null && loop.hasOwnProperty ("__kwargtrans__"))) {;
@@ -911,11 +911,17 @@ export var Graphics =  __class__ ('Graphics', [object], {
 			var height = image.height;
 		}
 		if (opacity !== null) {
+			if (opacity > 1.0) {
+				var opacity = 1.0;
+			}
+			else if (opacity < 0.0) {
+				var opacity = 0.0;
+			}
 			self.ctx.globalAlpha = opacity;
-			self.ctx.drawImage (image.img, x, self._convY (y + image.height), width, height);
+			self.ctx.drawImage (image.img, x, self._convY (y + height), width, height);
 		}
 		else {
-			self.ctx.drawImage (image.img, x, self._convY (y + image.height), width, height);
+			self.ctx.drawImage (image.img, x, self._convY (y + height), width, height);
 		}
 		self.ctx.restore ();
 	});},

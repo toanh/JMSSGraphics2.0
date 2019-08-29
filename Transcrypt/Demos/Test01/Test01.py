@@ -7,13 +7,13 @@ game = Graphics(600, 400, "My Game!")
 x = 200
 y = 300
 
-r = 1.0
+red = 1.0
 
 @game.mainloop
 def doFrame():
     global y, r, game
     y = y - 2
-    game.clear(r=r, b=0.0)
+    game.clear(r=red)
 
     game.drawText("Hello, world!", 100, 100)
 

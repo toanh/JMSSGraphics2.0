@@ -1,10 +1,10 @@
-// Transcrypt'ed from Python, 2018-12-17 22:43:42
+// Transcrypt'ed from Python, 2019-08-15 08:27:52
 var __name__ = 'org.transcrypt.__runtime__';
 export var __envir__ = {};
 __envir__.interpreter_name = 'python';
 __envir__.transpiler_name = 'transcrypt';
 __envir__.executor_name = __envir__.transpiler_name;
-__envir__.transpiler_version = '3.7.12';
+__envir__.transpiler_version = '3.7.16';
 
 export function __nest__ (headObject, tailNames, value) {
     var current = headObject;

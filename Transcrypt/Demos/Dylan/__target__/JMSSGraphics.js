@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-12-16 21:32:08
+// Transcrypt'ed from Python, 2019-08-28 21:27:53
 var math = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
 import * as __module_math__ from './math.js';
@@ -412,7 +412,7 @@ export var Graphics =  __class__ ('Graphics', [object], {
 		self.title = title;
 		self.done = false;
 		self.fps = fps;
-		self.listeners = list ([]);
+		self.listeners = [];
 		self.draw_func = null;
 		self.init_func = null;
 		self.py_keys = dict ((function () {
@@ -437,10 +437,12 @@ export var Graphics =  __class__ ('Graphics', [object], {
 		document.ontouchstart = self._touchstart;
 		document.ontouchmove = self._touchmove;
 		document.ontouchend = self._touchend;
+		self.pixel_id = self.ctx.createImageData (1, 1);
+		self.pixel_color = self.pixel_id.data;
 		self.soundPlayers = dict ({});
 		self.loadingResources = 0;
 		self.resources = dict ({});
-		self.commands = list ([]);
+		self.commands = [];
 		self.prevTimeStamp = 0;
 	});},
 	get reveal () {return __get__ (this, function (self) {
@@ -474,6 +476,22 @@ export var Graphics =  __class__ ('Graphics', [object], {
 		else {
 		}
 		window.setInterval (self.draw_func, 17.0);
+	});},
+	get close () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return ;
 	});},
 	get exit () {return __get__ (this, function (self) {
 		if (arguments.length) {
@@ -764,7 +782,7 @@ export var Graphics =  __class__ ('Graphics', [object], {
 		else {
 		}
 		var howl = window.Howl;
-		return new howl (dict ({'src': list ([filename])}));
+		return new howl (dict ({'src': [filename]}));
 	});},
 	get playSound () {return __get__ (this, function (self, sound, loop) {
 		if (typeof loop == 'undefined' || (loop != null && loop.hasOwnProperty ("__kwargtrans__"))) {;
@@ -925,9 +943,18 @@ export var Graphics =  __class__ ('Graphics', [object], {
 		}
 		self.ctx.restore ();
 	});},
-	get drawCircle () {return __get__ (this, function (self, color, pos, radius, width) {
-		if (typeof width == 'undefined' || (width != null && width.hasOwnProperty ("__kwargtrans__"))) {;
-			var width = 0;
+	get drawPixel () {return __get__ (this, function (self, x, y, r, g, b, a) {
+		if (typeof r == 'undefined' || (r != null && r.hasOwnProperty ("__kwargtrans__"))) {;
+			var r = 1.0;
+		};
+		if (typeof g == 'undefined' || (g != null && g.hasOwnProperty ("__kwargtrans__"))) {;
+			var g = 1.0;
+		};
+		if (typeof b == 'undefined' || (b != null && b.hasOwnProperty ("__kwargtrans__"))) {;
+			var b = 1.0;
+		};
+		if (typeof a == 'undefined' || (a != null && a.hasOwnProperty ("__kwargtrans__"))) {;
+			var a = 1.0;
 		};
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
@@ -936,35 +963,23 @@ export var Graphics =  __class__ ('Graphics', [object], {
 				for (var __attrib0__ in __allkwargs0__) {
 					switch (__attrib0__) {
 						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-						case 'color': var color = __allkwargs0__ [__attrib0__]; break;
-						case 'pos': var pos = __allkwargs0__ [__attrib0__]; break;
-						case 'radius': var radius = __allkwargs0__ [__attrib0__]; break;
-						case 'width': var width = __allkwargs0__ [__attrib0__]; break;
+						case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+						case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+						case 'r': var r = __allkwargs0__ [__attrib0__]; break;
+						case 'g': var g = __allkwargs0__ [__attrib0__]; break;
+						case 'b': var b = __allkwargs0__ [__attrib0__]; break;
+						case 'a': var a = __allkwargs0__ [__attrib0__]; break;
 					}
 				}
 			}
 		}
 		else {
 		}
-		// pass;
-	});},
-	get drawPixel () {return __get__ (this, function (self, pos, color) {
-		if (arguments.length) {
-			var __ilastarg0__ = arguments.length - 1;
-			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
-				var __allkwargs0__ = arguments [__ilastarg0__--];
-				for (var __attrib0__ in __allkwargs0__) {
-					switch (__attrib0__) {
-						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-						case 'pos': var pos = __allkwargs0__ [__attrib0__]; break;
-						case 'color': var color = __allkwargs0__ [__attrib0__]; break;
-					}
-				}
-			}
-		}
-		else {
-		}
-		// pass;
+		self.pixel_color [0] = int (r * 255.0);
+		self.pixel_color [1] = int (g * 255.0);
+		self.pixel_color [2] = int (b * 255.0);
+		self.pixel_color [3] = int (a * 255.0);
+		self.ctx.putImageData (self.pixel_id, x, self._convY (y));
 	});},
 	get drawLine () {return __get__ (this, function (self, x1, y1, x2, y2, r, g, b, a, width) {
 		if (typeof r == 'undefined' || (r != null && r.hasOwnProperty ("__kwargtrans__"))) {;
@@ -1011,6 +1026,46 @@ export var Graphics =  __class__ ('Graphics', [object], {
 		self.ctx.lineTo (x2, self._convY (y2));
 		self.ctx.stroke ();
 	});},
+	get drawCircle () {return __get__ (this, function (self, x, y, radius, r, g, b, a) {
+		if (typeof r == 'undefined' || (r != null && r.hasOwnProperty ("__kwargtrans__"))) {;
+			var r = 1.0;
+		};
+		if (typeof g == 'undefined' || (g != null && g.hasOwnProperty ("__kwargtrans__"))) {;
+			var g = 1.0;
+		};
+		if (typeof b == 'undefined' || (b != null && b.hasOwnProperty ("__kwargtrans__"))) {;
+			var b = 1.0;
+		};
+		if (typeof a == 'undefined' || (a != null && a.hasOwnProperty ("__kwargtrans__"))) {;
+			var a = 1.0;
+		};
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+						case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+						case 'radius': var radius = __allkwargs0__ [__attrib0__]; break;
+						case 'r': var r = __allkwargs0__ [__attrib0__]; break;
+						case 'g': var g = __allkwargs0__ [__attrib0__]; break;
+						case 'b': var b = __allkwargs0__ [__attrib0__]; break;
+						case 'a': var a = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		self.ctx.fillStyle = ((((((('rgba(' + str (int (r * 255.0))) + ',') + str (int (g * 255.0))) + ',') + str (int (b * 255.0))) + ',') + str (int (a * 255.0))) + ')';
+		self.ctx.beginPath ();
+		self.ctx.strokeStyle = ((((((('rgba(' + str (int (r * 255.0))) + ',') + str (int (g * 255.0))) + ',') + str (int (b * 255.0))) + ',') + str (int (a * 255.0))) + ')';
+		self.ctx.arc (x, self._convY (y), radius, 0, 2 * Math.PI, true);
+		self.ctx.fill ();
+		self.ctx.stroke ();
+	});},
 	get drawRect () {return __get__ (this, function (self, x1, y1, x2, y2, r, g, b, a) {
 		if (typeof r == 'undefined' || (r != null && r.hasOwnProperty ("__kwargtrans__"))) {;
 			var r = 1.0;
@@ -1048,10 +1103,10 @@ export var Graphics =  __class__ ('Graphics', [object], {
 		var ctx = self.ctx;
 		ctx.fillStyle = ((((((('rgba(' + str (int (r * 255.0))) + ',') + str (int (g * 255.0))) + ',') + str (int (b * 255.0))) + ',') + str (int (a * 255.0))) + ')';
 		ctx.beginPath ();
-		ctx.moveTo (x1, y1);
-		ctx.lineTo (x2, y1);
-		ctx.lineTo (x2, y2);
-		ctx.lineTo (x1, y2);
+		ctx.moveTo (x1, self._convY (y1));
+		ctx.lineTo (x2, self._convY (y1));
+		ctx.lineTo (x2, self._convY (y2));
+		ctx.lineTo (x1, self._convY (y2));
 		ctx.closePath ();
 		ctx.fill ();
 	});}

@@ -257,12 +257,18 @@ def Torch():
 
 @jmss.mainloop
 def Game():
+
     Draw() #Drawing the images
     Fire1() #First Campfire 
     Fire2() #Second Campfire
     Fire3() #Third Campfire
     Torch() #Torch with the fire
     Rain() #Rain particles
+
+    jmss.drawCircle(50, 50, 50,1,0,0)
+    jmss.drawRect(0,0,20,20,0,0,1)
+    #jmss.drawLine(0,0,100,100)
+    jmss.drawPixel(50, 50, 1, 1, 1)
 
  #   Check how many particles are on the screen:
 ##    n = len(torch_fire_list) + len(rain_list) + len(fire_list)
