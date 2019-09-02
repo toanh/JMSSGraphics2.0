@@ -1,5 +1,7 @@
-# Version 2.0.3.1
+# Version 2.0.4
 # Latest updates:
+# 2.0.4
+# Added support for blocking input()
 # 2.0.3.1:
 # Removed set_fps_limit due to it missing from Pyglet.clock 1.4.2
 # 2.0.3:
@@ -271,6 +273,11 @@ class JMSSPygletApp(pyglet.window.Window):
 
         self.closed = False
 
+        self.keyboard_buffer = []
+        self.keyboard_buffer_len = 50
+
+        self.last_key = None
+
         # self.set_mouse_visible(False)
 
     def start(self):
@@ -316,6 +323,8 @@ class JMSSPygletApp(pyglet.window.Window):
         self.texture = None
         self.vertex_array = []
 
+        self.last_key = None
+
         return True
 
     def mainloop(self, dt, *args, **kwargs):
@@ -353,10 +362,21 @@ class JMSSPygletApp(pyglet.window.Window):
         self.closed = True
         self.close()
 
+    def flush_buffer(self):
+        self.keyboard_buffer = []
+
+    def get_key_pressed(self):
+        return self.last_key
+
     def on_key_press(self, symbol, modifiers):
+        self.last_key = symbol
         self.keys[symbol] = True
+        if len(self.keyboard_buffer) > self.keyboard_buffer_len:
+            del self.keyboard_buffer[0]
+        self.keyboard_buffer.append(symbol)
 
     def on_key_release(self, symbol, modifiers):
+        self.last_key = None
         self.keys[symbol] = False
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
@@ -442,6 +462,34 @@ class Graphics:
 
         self.commands = []
         return result
+
+    def input(self, text, x = 0, y = 0):
+        done = False
+        self.drawText(text, 100, 100)
+        input_string = ""
+        self.app.flush_buffer()
+        while not done:
+            if len(self.app.keyboard_buffer) > 0:
+                last_key = self.app.keyboard_buffer[-1]
+            else:
+                last_key = None
+            if last_key == KEY_BACKSPACE:
+
+                del self.app.keyboard_buffer[-1]
+                if len(self.app.keyboard_buffer) > 0:
+                    del self.app.keyboard_buffer[-1]
+            elif last_key == KEY_ENTER:
+                del self.app.keyboard_buffer[-1]
+                done = True
+
+            input_string = "".join([chr(c) for c in self.app.keyboard_buffer])
+            self.commands[-1][1]["text"] = text + input_string + "_"
+            self.app.reveal()
+
+
+        self.app.flush_buffer()
+        return input_string
+
 
     def mainloop(self, func):
         self.app.draw_func = func

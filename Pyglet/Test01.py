@@ -15,5 +15,7 @@ while game.reveal():
     game.clear(r = r)
     r += 0.01
     if r > 1.0:
+        answer = game.input("Enter your name:")
+        print(answer)
         r = 0.0
 
