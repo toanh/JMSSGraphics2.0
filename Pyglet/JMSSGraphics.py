@@ -1,5 +1,7 @@
-# Version 2.0.4
+# Version 2.0.4.1
 # Latest updates:
+# 2.0.4.1
+# Added stopSound(), disabled streaming sounds
 # 2.0.4
 # Added support for blocking input()
 # 2.0.3.1:
@@ -536,7 +538,8 @@ class Graphics:
         return self.app.blend_type
 
     def loadSound(self, filename, streaming=False):
-        return pyglet.media.load(filename=filename, streaming=streaming)
+        # TODO: streaming doesn't work properly
+        return pyglet.media.load(filename=filename, streaming=False)
 
     def playSound(self, sound, loop=False):
         if sound in self.soundPlayers:
@@ -553,6 +556,11 @@ class Graphics:
     def pauseSound(self, sound):
         if sound in self.soundPlayers:
             self.soundPlayers[sound].pause()
+
+    def stopSound(self, sound):
+        if sound in self.soundPlayers:
+            self.soundPlayers[sound].pause()
+            self.soundPlayers[sound].next()
 
     def _renderPrimitives(self, renderType):
         if renderType == 1:
