@@ -452,9 +452,19 @@ class Graphics:
             elif opacity < 0.0:
                 opacity = 0.0
             self.ctx.globalAlpha = opacity
-            self.ctx.drawImage(image.img, x, self._convY(y + height), width, height)
+
+
+        if rotation != 0.0:
+            # TODO: Buggy!!!
+            self.ctx.save()
+            self.ctx.translate(x + width/2, self._convY(y + height/2))
+            self.ctx.rotate((rotation)* math.PI / 180)
+            self.ctx.drawImage(image.img, -width/2, -height/2, width, height)
+            self.ctx.restore()
         else:
             self.ctx.drawImage(image.img, x, self._convY(y + height), width, height)
+
+
         self.ctx.restore()
 
     def drawPixel(self, x, y, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
