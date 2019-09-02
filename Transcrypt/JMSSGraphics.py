@@ -457,9 +457,9 @@ class Graphics:
         if rotation != 0.0:
             # TODO: Buggy!!!
             self.ctx.save()
-            self.ctx.translate(x + width/2, self._convY(y + height/2))
-            self.ctx.rotate((rotation)* math.PI / 180)
-            self.ctx.drawImage(image.img, -width/2, -height/2, width, height)
+            self.ctx.translate(x, self._convY(y))
+            self.ctx.rotate(- rotation)# - 3.1415926535)# + math.PI / 180)
+            self.ctx.drawImage(image.img, 0, -height, width, height)
             self.ctx.restore()
         else:
             self.ctx.drawImage(image.img, x, self._convY(y + height), width, height)
