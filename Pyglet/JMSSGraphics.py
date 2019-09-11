@@ -546,11 +546,10 @@ class Graphics:
             self.soundPlayers[sound].pause()
             self.soundPlayers[sound] = None
         player = pyglet.media.Player()
-        sg = pyglet.media.SourceGroup(sound.audio_format, None)
-        sg.queue(sound)
-        sg.loop = loop
+        player.queue(sound)
+        # BUG: looping doesn't seem to work
+        player.loop = loop
         self.soundPlayers[sound] = player
-        player.queue(sg)
         player.play()
 
     def pauseSound(self, sound):
