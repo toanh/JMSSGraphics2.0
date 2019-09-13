@@ -307,8 +307,12 @@ class Graphics:
 
         self.canvas = document.getElementById('canvas')
         self.canvas.setAttribute("width", self.width)
-        self.canvas.setAttribute("height", self.width)
+        self.canvas.setAttribute("height", self.height)
         self.ctx = self.canvas.getContext('2d')
+
+        self.ctx.rect(0, 0, self.width, self.height);
+
+        self.ctx.clip();
 
 
         #doc <= html.TITLE(self.title)
@@ -433,7 +437,7 @@ class Graphics:
         self.ctx.textBaseline = "bottom"
         self.ctx.fillText(text, x, self.height - y)
 
-    def drawImage(self, image, x, y, width = None, height = None, rotation=0, anchorX = None, anchorY = None, opacity=None, rect=None):
+    def drawImage(self, image, x, y, width = None, height = None, rotation=0, anchorX = 0.0, anchorY = 0.0, opacity=None, rect=None):
         if (isinstance(image, str)):
             image = self.loadImage(image)
         if self.loadingResources > 0:
@@ -459,7 +463,7 @@ class Graphics:
             self.ctx.save()
             self.ctx.translate(x, self._convY(y))
             self.ctx.rotate(- rotation)# - 3.1415926535)# + math.PI / 180)
-            self.ctx.drawImage(image.img, 0, -height, width, height)
+            self.ctx.drawImage(image.img, -anchorX * width, -anchorY * height, width, height)
             self.ctx.restore()
         else:
             self.ctx.drawImage(image.img, x, self._convY(y + height), width, height)
@@ -468,6 +472,11 @@ class Graphics:
         self.ctx.restore()
 
     def drawPixel(self, x, y, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
+        r = min(r, 1.0)
+        g = min(g, 1.0)
+        b = min(b, 1.0)
+        a = min(a, 1.0)
+
         self.pixel_color[0] = int(r * 255.0)
         self.pixel_color[1] = int(g * 255.0)
         self.pixel_color[2] = int(b * 255.0)
@@ -476,6 +485,11 @@ class Graphics:
 
 
     def drawLine(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0, width = 1):
+        r = min(r, 1.0)
+        g = min(g, 1.0)
+        b = min(b, 1.0)
+        a = min(a, 1.0)
+
         self.ctx.beginPath()
         self.ctx.lineWidth = width
         self.ctx.strokeStyle = "rgba(" + str(int(r * 255.0)) + "," + str(int(g * 255.0)) + "," + str(int(b * 255.0)) + "," + str(int(a * 255.0)) + ")"
@@ -484,6 +498,11 @@ class Graphics:
         self.ctx.stroke()
 
     def drawCircle(self, x, y, radius, r=1.0, g=1.0, b=1.0, a=1.0):
+        r = min(r, 1.0)
+        g = min(g, 1.0)
+        b = min(b, 1.0)
+        a = min(a, 1.0)
+
         self.ctx.fillStyle = "rgba(" + str(int(r * 255.0)) + "," + str(int(g * 255.0)) + "," + str(int(b * 255.0)) + "," + str(int(a * 255.0)) + ")"
         self.ctx.beginPath();
         self.ctx.strokeStyle = "rgba(" + str(int(r * 255.0)) + "," + str(int(g * 255.0)) + "," + str(
@@ -496,6 +515,11 @@ class Graphics:
         self.ctx.stroke()
 
     def drawRect(self, x1, y1, x2, y2, r = 1.0, g = 1.0, b = 1.0, a = 1.0):
+        r = min(r, 1.0)
+        g = min(g, 1.0)
+        b = min(b, 1.0)
+        a = min(a, 1.0)
+
         ctx = self.ctx
         ctx.fillStyle = "rgba(" + str(int(r * 255.0)) + "," + str(int(g * 255.0)) + "," + str(int(b * 255.0)) + "," + str(int(a * 255.0)) + ")"        
         ctx.beginPath();
@@ -505,3 +529,4 @@ class Graphics:
         ctx.lineTo(x1, self._convY(y2));
         ctx.closePath();
         ctx.fill();            
+
