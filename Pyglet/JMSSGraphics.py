@@ -1,5 +1,7 @@
-# Version 2.0.4.1
+# Version 2.0.4.2
 # Latest updates:
+# 2.0.4.2
+# fixed playSound for Pyglet 1.4.4 +
 # 2.0.4.1
 # Added stopSound(), disabled streaming sounds
 # 2.0.4
@@ -439,6 +441,7 @@ class Graphics:
         self.update_func = None
 
         self.soundPlayers = {}
+        self.sounds = {}
 
         self.fullscreen = fullscreen
 
@@ -539,18 +542,26 @@ class Graphics:
 
     def loadSound(self, filename, streaming=False):
         # TODO: streaming doesn't work properly
-        return pyglet.media.load(filename=filename, streaming=False)
+        if filename not in self.sounds:
+            self.sounds[filename] = pyglet.media.load(filename=filename, streaming=False)
+        return self.sounds[filename]
+        
 
     def playSound(self, sound, loop=False):
-        if sound in self.soundPlayers:
-            self.soundPlayers[sound].pause()
-            self.soundPlayers[sound] = None
+        if isinstance(sound, str):
+            sound = self.loadSound(sound)
+
+
+        sound.play()
+        '''
         player = pyglet.media.Player()
-        player.queue(sound)
-        # BUG: looping doesn't seem to work
-        player.loop = loop
+        sg = pyglet.media.SourceGroup()#sound.audio_format, None)
+        sg.queue(sound)
+        sg.loop = loop
         self.soundPlayers[sound] = player
+        player.queue(sg)
         player.play()
+        '''
 
     def pauseSound(self, sound):
         if sound in self.soundPlayers:
