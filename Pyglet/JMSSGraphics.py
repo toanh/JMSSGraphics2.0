@@ -449,6 +449,20 @@ class Graphics:
 
         self.commands = []
 
+    # returns True if rectangle (x1, y1, x1 + w1, y1 + h1) intersects
+    #                 rectangle (x2, y2, x2 + w2, y2 + h2)
+    def intersects(self, x1, y1, w1, h1, x2, y2, w2, h2):
+        return not( ((x1 + w1) < x2) or \
+                    ((x2 + w2) < x1) or \
+                    ((y1 + h1) < y2) or \
+                    ((y2 + h2) < y1) )
+
+    # returns True if point (px, py) is inside
+    #                 rectangle (rx, ry, rx + w, ry + h)
+    def isInside(self, rx, ry, w, h, px, py):
+        return px >= rx and px <= (rx + w) and py >= ry and py <= (ry + h)
+
+
     def run(self):
         self.app.start()
         pyglet.app.run()
