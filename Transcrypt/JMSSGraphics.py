@@ -406,7 +406,7 @@ class Graphics:
 
     def getMousePos(self):
         if self.mouse_pos is not None:
-            return self.mouse_pos
+            return (self.mouse_pos[0], self.height - self.mouse_pos[1])
         else:
             return (0, 0)
 
