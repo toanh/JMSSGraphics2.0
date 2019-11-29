@@ -462,11 +462,15 @@ class Graphics:
     def init(self, func):
         self.app.init_func = func
 
-    def reveal(self):
+    def refresh(self):
         result = self.app.reveal()
 
         self.commands = []
         return result
+
+    # alias for reveal()
+    def reveal(self):
+        return self.refresh()
 
     def input(self, text, x = 0, y = 0):
         done = False
